@@ -2,6 +2,7 @@ package com.crm.app.lead;
 
 import com.crm.app.user.User;
 import com.crm.app.user.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,14 @@ public class LeadController {
         this.userRepository = userRepository;
     }
 
+    // Any logged-in user can view leads
     @GetMapping
     public List<Lead> getAllLeads() {
         return leadRepository.findAll();
     }
 
+    // ADMIN only
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Lead createLead(@RequestBody Lead lead) {
 
@@ -32,18 +36,17 @@ public class LeadController {
                     throw new RuntimeException("Lead already exists with this phone number");
                 });
 
-        // Fix assigned user
         if (lead.getAssignedTo() != null && lead.getAssignedTo().getId() != null) {
             User user = userRepository.findById(lead.getAssignedTo().getId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             lead.setAssignedTo(user);
-        } else {
-            lead.setAssignedTo(null);
         }
 
         return leadRepository.save(lead);
     }
 
+    // ADMIN only
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteLead(@PathVariable Long id) {
         leadRepository.deleteById(id);
