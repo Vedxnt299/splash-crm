@@ -1,3 +1,4 @@
+import CreateUser from "./pages/CreateUser";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
@@ -10,6 +11,8 @@ function App() {
   if (!token) return <Login />;
   if (path === "/leads") return <Leads />;
   if (path === "/add-lead") return <AddLead />;
+  if (path === "/create-user") return <CreateUser />;
+
   return <Dashboard />;
 }
 

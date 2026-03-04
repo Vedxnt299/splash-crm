@@ -40,7 +40,6 @@ export default function Leads() {
   return (
     <div style={{ padding: 30 }}>
       <h2>Leads</h2>
-
       <table border="1" cellPadding="8">
         <thead>
           <tr>
