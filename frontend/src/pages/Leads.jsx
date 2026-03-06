@@ -84,6 +84,11 @@ export default function Leads() {
                               >
                                 Delete
                               </button>
+                              <button
+                                onClick={() => window.location.href = `/lead?id=${lead.id}`}
+                              >
+                                Open
+                              </button>
                             </td>
             </tr>
           ))}

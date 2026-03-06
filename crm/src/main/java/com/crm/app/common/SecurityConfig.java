@@ -30,6 +30,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/login", "/health").permitAll()
+
+                        // leads
+                        .requestMatchers("/leads/**").authenticated()
+
+                        // followups
+                        .requestMatchers("/followups/**").authenticated()
+
+                        // users
+                        .requestMatchers("/users/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -3,6 +3,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import AddLead from "./pages/AddLead";
+import LeadDetails from "./pages/LeadDetails";
+import ImportLeads from "./pages/ImportLeads";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -12,6 +14,8 @@ function App() {
   if (path === "/leads") return <Leads />;
   if (path === "/add-lead") return <AddLead />;
   if (path === "/create-user") return <CreateUser />;
+  if (path === "/lead") return <LeadDetails />;
+  if (path === "/import-leads") return <ImportLeads />;
 
   return <Dashboard />;
 }

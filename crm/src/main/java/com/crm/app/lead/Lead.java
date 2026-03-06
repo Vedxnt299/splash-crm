@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import com.crm.app.user.User;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,6 +32,17 @@ public class Lead {
     private String name;
     private String city;
     private String state;
+
+    @Column(name = "next_followup_date")
+    private LocalDate nextFollowUpDate;
+
+    public LocalDate getNextFollowUpDate() {
+        return nextFollowUpDate;
+    }
+
+    public void setNextFollowUpDate(LocalDate nextFollowUpDate) {
+        this.nextFollowUpDate = nextFollowUpDate;
+    }
 
     @Column(length = 1000)
     private String requirement;

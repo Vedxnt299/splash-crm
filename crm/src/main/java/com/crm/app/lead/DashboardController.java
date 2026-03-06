@@ -1,10 +1,11 @@
 package com.crm.app.lead;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.crm.app.followup.FollowUpRepository;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -12,9 +13,12 @@ import java.util.Map;
 public class DashboardController {
 
     private final LeadRepository leadRepository;
+    private final FollowUpRepository followUpRepository;
 
-    public DashboardController(LeadRepository leadRepository) {
+    public DashboardController(LeadRepository leadRepository,
+                               FollowUpRepository followUpRepository) {
         this.leadRepository = leadRepository;
+        this.followUpRepository = followUpRepository;
     }
 
     @GetMapping("/summary")
@@ -28,6 +32,31 @@ public class DashboardController {
         summary.put("WARM", leadRepository.countByTemperature(LeadTemperature.WARM));
         summary.put("SMP", leadRepository.countByTemperature(LeadTemperature.SMP));
 
+        long today = leadRepository.findByNextFollowUpDate(LocalDate.now()).size();
+        long overdue = leadRepository.findByNextFollowUpDateBefore(LocalDate.now()).size();
+        long upcoming = leadRepository.findByNextFollowUpDateAfter(LocalDate.now()).size();
+
+        summary.put("FOLLOWUPS_TODAY", today);
+        summary.put("FOLLOWUPS_OVERDUE", overdue);
+        summary.put("FOLLOWUPS_UPCOMING", upcoming);
+
         return summary;
+    }
+
+    @GetMapping("/followups")
+    public Map<String, List<Lead>> getFollowUpLeads() {
+
+        Map<String, List<Lead>> data = new HashMap<>();
+
+        data.put("today",
+                leadRepository.findByNextFollowUpDate(LocalDate.now()));
+
+        data.put("overdue",
+                leadRepository.findByNextFollowUpDateBefore(LocalDate.now()));
+
+        data.put("upcoming",
+                leadRepository.findByNextFollowUpDateAfter(LocalDate.now()));
+
+        return data;
     }
 }
